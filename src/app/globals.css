@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fffcfb;
+  --color-ink: #172033;
+  --color-muted: #5b6474;
+  --color-rule: #e9e1de;
+  --color-grid: #f4d3cc;
+  --color-grid-strong: #eab3a8;
+  --color-healthy: #157f55;
+  --color-watch: #a86a12;
+  --color-critical: #c2362b;
+  --color-tint-healthy: #e6f3ec;
+  --color-tint-watch: #faefdc;
+  --color-tint-critical: #fbe6e3;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+}
+
+/* ECG chart paper: 1 mm minor squares, 5 mm major squares. Used only where a trace is drawn. */
+.chart-paper {
+  background-color: #fff8f6;
+  background-image:
+    linear-gradient(var(--color-grid-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid-strong) 1px, transparent 1px),
+    linear-gradient(var(--color-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+  background-position: -1px -1px;
+}
+
+.trace-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.4s cubic-bezier(0.55, 0.1, 0.35, 1) forwards;
+}
+
+.trace-sweep {
+  stroke-dasharray: 0.35 0.65;
+  animation: sweep 1.8s linear infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sweep {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trace-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .trace-sweep {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  details > :not(summary) {
+    display: block !important;
+  }
+  body {
+    background: white;
+  }
+  section {
+    break-inside: avoid-page;
+  }
+}
